@@ -24,6 +24,7 @@ class MTDieTest : public Element { public:
 
     int configure(Vector<String> &conf, ErrorHandler *errh) CLICK_COLD;
     int initialize(ErrorHandler *errh) CLICK_COLD;
+    void cleanup(CleanupStage) CLICK_COLD;
     bool run_task(Task *t);
 
   private:

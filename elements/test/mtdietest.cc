@@ -54,10 +54,17 @@ MTDieTest::initialize(ErrorHandler *)
     return 0;
 }
 
+void
+MTDieTest::cleanup(CleanupStage) {
+    for (int i = 0; i < _task.size(); ++i)
+        delete _task[i];
+}
+
 bool
-MTDieTest::run_task(Task *t)
+MTDieTest::run_task(Task *)
 {
 	router()->please_stop_driver();
+    return false;
 }
 
 
