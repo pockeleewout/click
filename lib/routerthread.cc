@@ -136,7 +136,7 @@ RouterThread::~RouterThread()
     assert(!active());
 }
 
-inline void
+void
 RouterThread::driver_lock_tasks()
 {
     set_thread_state(S_LOCKTASKS);
@@ -160,14 +160,6 @@ RouterThread::driver_lock_tasks()
     }
 }
 
-inline void
-RouterThread::driver_unlock_tasks()
-{
-    uint32_t val = _task_blocker.compare_swap((uint32_t) -1, 0);
-    (void) val;
-    assert(val == (uint32_t) -1);
-}
-
 void
 RouterThread::scheduled_tasks(Router *router, Vector<Task *> &x)
 {
@@ -181,6 +173,7 @@ RouterThread::scheduled_tasks(Router *router, Vector<Task *> &x)
 void
 RouterThread::request_stop()
 {
+    // NB only called from Master::request_stop()
     _stop_flag = 1;
     if (current_thread_is_running()) {
         // Set the current thread's tasks to "is_strong_unscheduled 2" so
@@ -622,13 +615,8 @@ RouterThread::driver()
 
 #if !BSD_NETISRSCHED
         // check to see if driver is stopped
-        if (_stop_flag > 0) {
-            driver_unlock_tasks();
-            bool b = _master->check_driver();
-            driver_lock_tasks();
-            if (!b)
-                break;
-        }
+        if (_stop_flag > 0 && _master->verify_stop(this))
+            break;
 #endif
 
         // run occasional tasks: timers, select, etc.
