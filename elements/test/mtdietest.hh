@@ -12,7 +12,7 @@ MTDieTest([I<keywords>])
 
 =s test
 
-runs regression tests for click_rcu
+Runs regression tests for router stopping in multithreaded Click.
 
 */
 
@@ -27,9 +27,9 @@ class MTDieTest : public Element { public:
     void cleanup(CleanupStage) CLICK_COLD;
     bool run_task(Task *t);
 
-  private:
-	Vector<Task*> _task;
-	int _nthreads;
+private:
+    Vector<Task*> _task;
+    int _nthreads;
 };
 
 CLICK_ENDDECLS

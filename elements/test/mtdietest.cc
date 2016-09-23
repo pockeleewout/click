@@ -1,6 +1,6 @@
 // -*- c-basic-offset: 4 -*-
 /*
- * rcutest.{cc,hh} -- regression test element for click_rcu
+ * mtdietest.{cc,hh} -- regression test element for multithreaded death
  * Tom Barbette
  *
  * Copyright (c) 2016 Cisco Meraki
@@ -33,11 +33,11 @@ MTDieTest::MTDieTest()
 int
 MTDieTest::configure(Vector<String> &conf, ErrorHandler *errh)
 {
-	_nthreads = master()->nthreads();
+    _nthreads = master()->nthreads();
     if (Args(conf, this, errh)
-	.read("NTHREADS", _nthreads)
-	.complete() < 0)
-	return -1;
+        .read("NTHREADS", _nthreads)
+        .complete() < 0)
+        return -1;
     return 0;
 }
 
@@ -46,10 +46,10 @@ MTDieTest::initialize(ErrorHandler *)
 {
     _task.resize(_nthreads);
     for (int i = 0; i < _nthreads; i++) {
-    	_task[i] = new Task(this);
+        _task[i] = new Task(this);
         _task[i]->initialize(this, false);
         _task[i]->move_thread(i);
-    	_task[i]->reschedule();
+        _task[i]->reschedule();
     }
     return 0;
 }
@@ -63,7 +63,7 @@ MTDieTest::cleanup(CleanupStage) {
 bool
 MTDieTest::run_task(Task *)
 {
-	router()->please_stop_driver();
+    router()->please_stop_driver();
     return false;
 }
 
