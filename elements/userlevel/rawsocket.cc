@@ -43,6 +43,8 @@
 
 #include "fakepcap.hh"
 
+#include <linux/sockios.h>
+
 CLICK_DECLS
 
 RawSocket::RawSocket()

@@ -53,6 +53,8 @@
 # include <net/ethernet.h>
 #endif
 
+# include <linux/sockios.h>
+
 CLICK_DECLS
 
 FromDevice::FromDevice()
